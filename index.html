@@ -112,6 +112,7 @@
       flex-direction: column;
       align-items: center;
       font-family: 'Poppins', sans-serif;
+      cursor: pointer; /* make it clear it's clickable */
     }
     .footer img {
       width: 120px;
@@ -128,6 +129,23 @@
       color: #999;
       margin-top: 12px;
     }
+
+    /* Full‑screen overlay for your screenshot */
+    #screenshotOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: none;               /* start hidden */
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    #screenshotOverlay img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
   </style>
 </head>
 <body>
@@ -142,8 +160,13 @@
     <div class="footer">
       <img src="qrcode.png" alt="QR code">
       <p>Seko līdzi</p>
-      <p class="build">Build #8</p>
+      <p class="build">Build #9</p>
     </div>
+  </div>
+
+  <!-- Full‑screen overlay container -->
+  <div id="screenshotOverlay">
+    <img src="screen.png" alt="Full‑screen view">
   </div>
 
   <script>
@@ -154,7 +177,7 @@
     const COLORS = {
       "Baltās": "#EEEEEE",
       "Mint":   "#AAF0D1",
-      "Zilās":"#40E0D0",
+      "Zilās":  "#40E0D0",
       "Persiku":"#FFDAB9"
     };
 
@@ -179,7 +202,7 @@
       teams.forEach((team, idx) => {
         const li = document.createElement('li');
         // fix border color per team
-        const key = team.name.split(' ')[0]; 
+        const key = team.name.split(' ')[0];
         li.style.borderColor = COLORS[key] || '#ccc';
 
         li.innerHTML = `
@@ -195,6 +218,18 @@
 
     fetchData();
     setInterval(fetchData, 10000);
+
+    // Toggle the full‑screen screenshot on QR click
+    const qr = document.querySelector('.footer img');
+    const overlay = document.getElementById('screenshotOverlay');
+
+    qr.addEventListener('click', () => {
+      overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
+    });
+    // Clicking the overlay itself also closes it
+    overlay.addEventListener('click', () => {
+      overlay.style.display = 'none';
+    });
   </script>
 </body>
 </html>
